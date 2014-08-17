@@ -10,10 +10,37 @@ Game::~Game() {
 
 int Game::init() {
 
+    //Serial testing
+    /*Serial* SP = new Serial("\\\\.\\COM3");    // adjust as needed
+
+    if (SP->IsConnected())
+        printf("We're connected");
+
+    char incomingData[256] = "";			// don't forget to pre-allocate memory
+    //printf("%s\n",incomingData);
+    int dataLength = 256;
+    int readResult = 0;
+
+    while(SP->IsConnected())
+    {
+        readResult = SP->ReadData(incomingData,dataLength);
+        printf("Bytes read: (-1 means no data available) %i\n",readResult);
+
+        std::string test(incomingData);
+
+        printf("%s",incomingData);
+        test = "";
+
+        Sleep(500);
+    }*/
+
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
         printf( "Unable to init SDL: %s\n", SDL_GetError() );
         return 1;
     }
+
+    freopen("CON", "w", stdout); // redirects stdout
+    freopen("CON", "w", stderr); // redirects stderr
 
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
@@ -179,7 +206,7 @@ void Game::readInputEvent() {
                 break;
             default:
                 break;
-			}
+            }
         }
 }
 

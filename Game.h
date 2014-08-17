@@ -12,6 +12,8 @@
 
 #include "Level.h"
 
+#include "SerialClass.h"
+
 
 using namespace std;
 
