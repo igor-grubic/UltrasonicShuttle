@@ -1,0 +1,15 @@
+successfully loaded sprite sprites/spaceship.bmp
+loaded sprite
+successfully loaded sprite sprites/beam_1.bmp
+loaded sprite
+successfully loaded sprite sprites/beam_2.bmp
+loaded sprite
+successfully loaded sprite sprites/back_1.bmp
+loaded sprite
+successfully loaded sprite sprites/back_2.bmp
+loaded sprite
+successfully loaded sprite sprites/enemy_1.bmp
+loaded sprite
+successfully loaded sprite sprites/explosion_1.bmp
+loaded sprite
+Exited cleanly
