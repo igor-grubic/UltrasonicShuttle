@@ -22,4 +22,6 @@
 
 # ??
 *.stackdump
-
+*.cbp
+*.depend
+*.layout
