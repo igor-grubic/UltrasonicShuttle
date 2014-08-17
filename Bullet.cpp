@@ -1,7 +1,7 @@
 #include "Bullet.h"
 
 Bullet::Bullet()  {
-    this->exists = 0;
+   this->exists = 0;
 }
 
 
