@@ -9,7 +9,7 @@
 
 #include <cstdlib>
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 #include "Sprite.h"
 

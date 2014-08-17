@@ -18,7 +18,7 @@ int Game::init() {
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
+    screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE|SDL_DOUBLEBUF);//SDL_FULLSCREEN
     if ( !screen ) {
         printf("Unable to set 640x480 video: %s\n", SDL_GetError());
         return 1;
@@ -209,14 +209,14 @@ void Game::handleEnemies() {
             if(enemies[i].armor < 0) {
                 enemies[i].exists = false;
 
-                addExplosion(SR_EXPLOSION_1, enemies[i].x,  enemies[i].y);
+                addExplosion(SR_EXPLOSION_1, enemies[i].x,  enemies[i].y, -1);
             }
 
             if(enemies[i].image->rectCollide(enemies[i].x, enemies[i].y, *player->image, player->x, player->y)) {
                 if(enemies[i].image->pixelCollide(enemies[i].x, enemies[i].y, *player->image, player->x, player->y)) {
                     enemies[i].armor -= player->bullets[i].damage;
                     player->bullets[i].exists = false;
-                    addExplosion(SR_EXPLOSION_1, enemies[i].x,  enemies[i].y);
+                    addExplosion(SR_EXPLOSION_1, enemies[i].x,  enemies[i].y, -1);
                 }
             }
         }
@@ -230,7 +230,7 @@ void Game::handleBullets() {
             bf->process(player->bullets[i]);
 
             //collision
-            for(int j = 0; j < MAX_ENEMIES; j++) {
+            /*for(int j = 0; j < MAX_ENEMIES; j++) {
                 if(enemies[j].exists == true ) {
                     if(enemies[j].image->rectCollide(enemies[j].x, enemies[j].y, *player->bullets[i].image, player->bullets[i].x, player->bullets[i].y)) {
                         if(enemies[j].image->pixelCollide(enemies[j].x, enemies[j].y, *player->bullets[i].image, player->bullets[i].x, player->bullets[i].y)) {
@@ -239,12 +239,12 @@ void Game::handleBullets() {
                         }
                     }
                 }
-            }
+            }*/
 
             //mouse collision
             if(player->bullets[i].y > player->bullets[i].targetY -10 && player->bullets[i].y < player->bullets[i].targetY +10){
                 player->bullets[i].exists = false;
-                addExplosion(SR_EXPLOSION_1, player->bullets[i].x,  player->bullets[i].y);
+                addExplosion(SR_EXPLOSION_1, player->bullets[i].x,  player->bullets[i].y, player->bullets[i].damage);
             }
 
             player->bullets[i].draw(screen, player->bullets[i].x, player->bullets[i].y);
@@ -356,7 +356,7 @@ int Game::getEmptyExplosion() {
     return -1;
 }
 
-void Game::addExplosion(int image, int x, int y) {
+void Game::addExplosion(int image, int x, int y, int damage = -1) {
     int i = getEmptyExplosion();
     if(i > -1) {
         explosions[i].exists = true;
@@ -365,5 +365,17 @@ void Game::addExplosion(int image, int x, int y) {
         explosions[i].duration = explosions[i].image->speed * explosions[i].image-> maxFrames;
         explosions[i].x = x;
         explosions[i].y = y;
+        if(damage != -1)
+        {
+            for(int j = 0; j < MAX_ENEMIES; j++) {
+                if(enemies[j].exists == true ) {
+                    if(enemies[j].image->rectCollide(enemies[j].x, enemies[j].y, *explosions[i].image, x, y)) {
+                        if(enemies[j].image->pixelCollide(enemies[j].x, enemies[j].y, *explosions[i].image, x, y)) {
+                            enemies[j].armor -= damage;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@
 #include <string>
 #include <math.h>
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 /*
     Sprite library for SDL - using bitmaps

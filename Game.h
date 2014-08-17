@@ -37,7 +37,7 @@ public:
 
     void handleExplosions();
     int getEmptyExplosion();
-    void addExplosion(int image, int x, int y);
+    void addExplosion(int image, int x, int y, int damage);
 
     void shootbeam(int beam);
 
