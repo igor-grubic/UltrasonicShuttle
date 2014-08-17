@@ -10,8 +10,8 @@ int main ( int argc, char** argv ) {
     }
     game.gs = GS_MAIN;
 
-    int startTicks = SDL_GetTicks();
-    int currentTicks = 0;
+    uint32_t startTicks = SDL_GetTicks();
+    uint32_t currentTicks = 0;
 
     while (game.gs != GS_DONE) {
         if(game.gs == GS_MAIN) {
@@ -22,6 +22,7 @@ int main ( int argc, char** argv ) {
             {
                 SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - currentTicks );
                 startTicks = SDL_GetTicks();
+                currentTicks = 0;
             }
         }
     }

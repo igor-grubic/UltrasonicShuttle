@@ -26,7 +26,7 @@ public:
 
     void backGround();
     void handleInput();
-    void keyboard();
+    void readInputEvent();
 
     void handleLevel();
 

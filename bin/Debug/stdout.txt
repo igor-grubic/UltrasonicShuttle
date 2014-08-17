@@ -12,4 +12,14 @@ successfully loaded sprite sprites/enemy_1.bmp
 loaded sprite
 successfully loaded sprite sprites/explosion_1.bmp
 loaded sprite
+Next Event
+Next Event - Add Enemy
+Next Event
+Next Event - Add Enemy
+Next Event
+Next Event - Add Enemy
+Next Event
+Next Event - Add Enemy
+Next Event
+Next Event - Add Enemy
 Exited cleanly
