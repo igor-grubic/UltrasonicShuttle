@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet() {
+Bullet::Bullet()  {
     this->exists = 0;
 }
 
