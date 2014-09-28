@@ -12,9 +12,11 @@
 
 #include "Level.h"
 
-#include "SerialClass.h"
+#include <boost/thread.hpp>
 
+#include "BufferedAsyncSerial.h"
 
+using namespace boost;
 using namespace std;
 
 class Game {
@@ -47,6 +49,8 @@ public:
 
     Player* player;
 
+
+
     SDL_Surface* screen;
 
     SDL_Surface* text;
@@ -55,6 +59,11 @@ public:
 
     int mouseX;
     int mouseY;
+    int sonicDistanceX;
+    int sonicDistanceY;
+    int sonicMiddleX;
+    int sonicMiddleY;
+
     bool KEYS[322];  // 322 is the number of SDLK_DOWN events
 
     GlobalSpriteResource* gsr;

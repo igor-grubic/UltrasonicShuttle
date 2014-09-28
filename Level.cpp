@@ -1,5 +1,7 @@
 #include "Level.h"
 
+#include <boost/random.hpp>
+
 Level::Level() {
 
 }
@@ -41,12 +43,35 @@ Level::~Level() {
 }*/
 void Level::loadLevel(int level) {
     lvl_cmds = vector<Command*>();
+
+    boost::random::mt19937 rng;
+    boost::random::uniform_int_distribution<> newX(1,10);
+    boost::random::uniform_int_distribution<> newY(1,10);
+    boost::random::uniform_int_distribution<> newspeedX(-1,5);
+    boost::random::uniform_int_distribution<> newspeedY(-1,5);
+    boost::random::uniform_int_distribution<> newZ(1,10);
+
     if(level == 1) {
-        addEnemyToQueue(2800, SR_ENEMY_1, 600, 100, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, -1, 0);
+            for(int i=0; i<5000; i++){
+
+                int rollX = newX(rng);
+                int rollY = newY(rng);
+                int rollZ = newZ(rng);
+                int speedX = newspeedX(rng);
+                int speedY = newspeedY(rng);
+
+                if(rollX > 5) rollX =0;
+                else rollX = 600;
+                if(rollY > 5) rollY =0;
+                else rollY = 600;
+
+                addEnemyToQueue(i*150, SR_ENEMY_1, rollX, rollY, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, speedX, speedY);
+            }
+        /*addEnemyToQueue(2800, SR_ENEMY_1, 600, 100, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, -1, 0);
         addEnemyToQueue(2900, SR_ENEMY_1, 40, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 1);
         addEnemyToQueue(3000, SR_ENEMY_1, 80, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 2);
         addEnemyToQueue(3100, SR_ENEMY_1, 120, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 3);
-        /*addEnemyToQueue(3200, SR_ENEMY_1, 160, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
+        addEnemyToQueue(3200, SR_ENEMY_1, 160, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
         addEnemyToQueue(3300, SR_ENEMY_1, 200, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
         addEnemyToQueue(3400, SR_ENEMY_1, 240, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
         addEnemyToQueue(3500, SR_ENEMY_1, 280, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
@@ -75,10 +100,10 @@ void Level::loadLevel(int level) {
         addEnemyToQueue(10000, SR_ENEMY_1, 120, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
         addEnemyToQueue(10100, SR_ENEMY_1, 80, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
         addEnemyToQueue(10200, SR_ENEMY_1, 40, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
-        addEnemyToQueue(10300, SR_ENEMY_1, 0, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);*/
+        addEnemyToQueue(10300, SR_ENEMY_1, 0, 0, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, 8);
 
 
-        addEnemyToQueue(12500, SR_ENEMY_1, 320, 480, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, -8);
+        addEnemyToQueue(12500, SR_ENEMY_1, 320, 480, 90, 1, 1, PLAYER_BEAM_NORMAL, FLIGHT_NORMAL, 0, -8);*/
 
     }
 }

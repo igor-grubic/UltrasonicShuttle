@@ -10,29 +10,8 @@ Game::~Game() {
 
 int Game::init() {
 
-    //Serial testing
-    /*Serial* SP = new Serial("\\\\.\\COM3");    // adjust as needed
-
-    if (SP->IsConnected())
-        printf("We're connected");
-
-    char incomingData[256] = "";			// don't forget to pre-allocate memory
-    //printf("%s\n",incomingData);
-    int dataLength = 256;
-    int readResult = 0;
-
-    while(SP->IsConnected())
-    {
-        readResult = SP->ReadData(incomingData,dataLength);
-        printf("Bytes read: (-1 means no data available) %i\n",readResult);
-
-        std::string test(incomingData);
-
-        printf("%s",incomingData);
-        test = "";
-
-        Sleep(500);
-    }*/
+    sonicMiddleX = 20;
+    sonicMiddleY = 20;
 
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
         printf( "Unable to init SDL: %s\n", SDL_GetError() );
@@ -99,9 +78,13 @@ void Game::reset() {
     level->levelStartTime = SDL_GetTicks();
 }
 
+BufferedAsyncSerial serial("COM4",9600);
+
+
 void Game::run() {
     //inputs
     //ultrasonicsensor()
+
 
     handleInput();
 
@@ -129,8 +112,57 @@ void Game::run() {
 }
 
 void Game::handleInput() {
-
+    sonicDistanceX = 0;
+    sonicDistanceY = 0;
     readInputEvent();
+
+    if(sonicDistanceX != 0){
+        if(sonicDistanceX > sonicMiddleX){
+            if(sonicDistanceX > sonicMiddleX +10){
+                if(player->x - player->speed >= 0) {
+                    player->x -= player->speed;
+                }
+            }
+            if(player->x - player->speed >= 0) {
+                player->x -= player->speed;
+            }
+        }
+        else if(sonicDistanceX < sonicMiddleX){
+            if(sonicDistanceX < sonicMiddleX -10){
+                if(player->x + player->speed <= screen->w-20) {
+                    player->x += player->speed;
+                }
+            }
+            if(player->x + player->speed <= screen->w-20) {
+                player->x += player->speed;
+            }
+        }
+
+    }
+
+    if(sonicDistanceY != 0){
+        if(sonicDistanceY > sonicMiddleY){
+            if(sonicDistanceY > sonicMiddleY+10){
+                if(player->y - player->speed >= 0) {
+            player->y -= player->speed;
+        }
+            }
+            if(player->y - player->speed >= 0) {
+            player->y -= player->speed;
+        }
+        }
+        else if(sonicDistanceY < sonicMiddleY){
+            if(sonicDistanceY < sonicMiddleY-10){
+                if(player->y + player->speed <= screen->h-20) {
+            player->y += player->speed;
+        }
+            }
+            if(player->y + player->speed <= screen->h-20) {
+            player->y += player->speed;
+        }
+        }
+
+    }
 
     if(KEYS[SDLK_LEFT]) {
         if(player->x - player->speed >= 0) {
@@ -171,10 +203,48 @@ void Game::handleInput() {
 
     if(KEYS[SDLK_ESCAPE]) {
         gs = GS_DONE;
+        serial.close();
     }
 }
 
 void Game::readInputEvent() {
+
+        try {
+            string output = serial.readString();
+            string openingL = "USL: ";
+            string openingR = "USR: ";
+            string closing = "cm";
+
+            if(output.length() > 0)
+            {
+                size_t pingPosL = output.find(openingL,0);
+                size_t pingPosR = output.find(openingR,0);
+
+                if(pingPosL != string::npos){
+                    size_t cmPos = output.find(closing,0);
+                    if(cmPos != string::npos){
+                        //sorry
+                        string distanceL = output.substr(pingPosL + openingL.length(), (output.length() - openingL.length() - (output.length() - cmPos)));
+                        sonicDistanceX = atoi(distanceL.c_str());
+                    }
+                }
+                if(pingPosR != string::npos){
+                    size_t cmPos = output.find(closing,0);
+                    if(cmPos != string::npos){
+                        //sorry
+                        string distanceR = output.substr(pingPosR + openingR.length(), (output.length() - openingR.length() - (output.length() - cmPos)));
+                        sonicDistanceY = atoi(distanceR.c_str());
+                    }
+                }
+            }
+
+        } catch(boost::system::system_error& e)
+        {
+            cout<<"Error: "<<endl;
+
+        }
+
+
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -257,7 +327,7 @@ void Game::handleBullets() {
             bf->process(player->bullets[i]);
 
             //collision
-            /*for(int j = 0; j < MAX_ENEMIES; j++) {
+            for(int j = 0; j < MAX_ENEMIES; j++) {
                 if(enemies[j].exists == true ) {
                     if(enemies[j].image->rectCollide(enemies[j].x, enemies[j].y, *player->bullets[i].image, player->bullets[i].x, player->bullets[i].y)) {
                         if(enemies[j].image->pixelCollide(enemies[j].x, enemies[j].y, *player->bullets[i].image, player->bullets[i].x, player->bullets[i].y)) {
@@ -266,7 +336,7 @@ void Game::handleBullets() {
                         }
                     }
                 }
-            }*/
+            }
 
             //mouse collision
             if(player->bullets[i].y > player->bullets[i].targetY -10 && player->bullets[i].y < player->bullets[i].targetY +10){
